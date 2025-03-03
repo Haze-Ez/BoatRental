@@ -3,19 +3,23 @@ package Ezebuiro.Services;
 
 import Ezebuiro.Database_Operations_Control.BoatDAO;
 import Ezebuiro.Entities.Boat;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
+@Service
 public class BoatService {
-    private BoatDAO boatDAO;
+    private final BoatDAO boatDAO;
 
-    public BoatService() {
+    @Autowired
+    public BoatService(BoatDAO boatDAO) {
         this.boatDAO = new BoatDAO();
     }
 
-    public void create(Boat boat){
-        boatDAO.createBoat(boat);
+    public void addBoat(Boat boat){
+        boatDAO.addBoat(boat);
     }
 
     public List<Boat> getAllBoats(){
@@ -23,20 +27,27 @@ public class BoatService {
     }
 
     public List<Boat> getBoatsByBrand(String brand){
-       return boatDAO.SearchbyBrand(brand);
+
+        List<Boat> boats = null;
+        try {
+            boats= boatDAO.getBoatbyBrand(brand);
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+        return boats;
     }
 
-    public Boat getBoat(int id) throws SQLException {
-        return boatDAO.searchById(id);
+    public Boat getBoatById(int id) throws SQLException {
+        return boatDAO.getBoatById(id);
     }
 
     public List<Boat> Advancedsearch(int min, int max, double price, String brand, String model) throws SQLException {
 
-        return boatDAO.Advancedsearch(min, max, price, brand, model);
+        return boatDAO.searchBoats(min, max, price, brand, model);
     }
 
     public void Availability(Boat boat,boolean available) throws SQLException {
-        boatDAO.updateBoatAvailability(boat,available);
+        boatDAO.updateBoat(boat,available);
     }
 
     public  void delete(int id) throws SQLException {

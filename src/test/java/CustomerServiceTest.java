@@ -1,5 +1,6 @@
 
 
+import Ezebuiro.Database_Operations_Control.CustomerDAO;
 import Ezebuiro.Entities.Boat;
 import Ezebuiro.Entities.Customer;
 import Ezebuiro.Services.CustomerService;
@@ -16,7 +17,7 @@ public class CustomerServiceTest {
     List<Customer> customers;
     @BeforeEach
     void setUp() throws SQLException {
-        customerService = new CustomerService();
+        customerService = new CustomerService(new CustomerDAO());
         customers = customerService.getAllCustomers();
         customer = customerService.getCustomer_name("Lizzy_Irithyl");
     }

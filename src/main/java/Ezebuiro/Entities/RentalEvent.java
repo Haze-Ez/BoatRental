@@ -4,6 +4,7 @@ import Ezebuiro.Database_Operations_Control.BoatDAO;
 import Ezebuiro.Database_Operations_Control.CustomerDAO;
 import Ezebuiro.Entities.Customer;
 import Ezebuiro.Entities.Boat;
+
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -97,21 +98,21 @@ public class RentalEvent {
     @Override
     public String toString() {
         String boatBrand = null;
-        boatBrand = (boatDAO != null) ? boatDAO.searchById(boatId).getBrand() : "N/A";
         String customerFirstName = null;
-        try {
-            customerFirstName = (customerDAO != null) ? customerDAO.searchbyid(customerId).getFirstName() : "N/A";
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
         String customerLastName = null;
         try {
-            customerLastName = (customerDAO != null) ? customerDAO.searchbyid(customerId).getLastName() : "N/A";
+
+            boatBrand = (boatDAO != null) ? boatDAO.getBoatById(boatId).getBrand() : "N/A";
+
+            customerFirstName = (customerDAO != null) ? customerDAO.getCustomerById(customerId).getFirstName() : "N/A";
+
+            customerLastName = (customerDAO != null) ? customerDAO.getCustomerById(customerId).getLastName() : "N/A";
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.getMessage();
         }
 
-        return "{ RentalEvent -- " +
+        return "RentalEvent {-- " +
                 "id=" + id +
                 ", boat_Brand=" + boatBrand +
                 ", customer_FirstName=" + customerFirstName +
@@ -121,7 +122,9 @@ public class RentalEvent {
                 ", totalCost=" + totalCost +
                 ", isClosed=" + isClosed +
                 " --}";
+
     }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -139,8 +142,6 @@ public class RentalEvent {
     public int hashCode() {
         return Objects.hash(id, boatId, customerId, rentalDate, returnDate);
     }
-
-
 
 
 }

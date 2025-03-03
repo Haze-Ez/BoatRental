@@ -1,3 +1,4 @@
+import Ezebuiro.Database_Operations_Control.BoatDAO;
 import Ezebuiro.Entities.Boat;
 import Ezebuiro.Services.BoatService;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +16,7 @@ public class BoatServiceTest {
     List <Boat> boats;
     @BeforeEach
     void setUp() throws SQLException {
-        boatService = new BoatService();
+        boatService = new BoatService(new BoatDAO());
         boats = boatService.getAllBoats();
 
     }
@@ -30,7 +31,7 @@ public class BoatServiceTest {
        }
 
        Boat boat = new Boat(0,"Tank","XPV-311",400.0,350,"ABAB1243",true);
-        boatService.create(boat);
+        boatService.addBoat(boat);
         boats = boatService.getAllBoats();
 
         assertFalse(boats.isEmpty());
@@ -53,7 +54,7 @@ public class BoatServiceTest {
     public void getBoatById() throws SQLException {
         boats = boatService.getAllBoats();
         Boat lastBoat = boats.getLast();
-        assertEquals(lastBoat,boatService.getBoat(lastBoat.getId()));
+        assertEquals(lastBoat,boatService.getBoatById(lastBoat.getId()));
 
     }
 
@@ -70,12 +71,12 @@ public class BoatServiceTest {
     public void UpdateBoatAvailability() throws SQLException {
         boat1 = boatService.getBoatsByBrand("Tank").get(0);
         if(boat1.isAvailable()){
-            boatService.Availability(boatService.getBoat(boat1.getId()),false);
-            boat1 = boatService.getBoat(boat1.getId());
+            boatService.Availability(boatService.getBoatById(boat1.getId()),false);
+            boat1 = boatService.getBoatById(boat1.getId());
             assertFalse(boat1.isAvailable());
         }else{
-            boatService.Availability(boatService.getBoat(boat1.getId()),true);
-            boat1 = boatService.getBoat(boat1.getId());
+            boatService.Availability(boatService.getBoatById(boat1.getId()),true);
+            boat1 = boatService.getBoatById(boat1.getId());
             assertTrue(boat1.isAvailable());
         }
 
