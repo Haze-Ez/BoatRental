@@ -2,13 +2,17 @@ package Ezebuiro.Database_Operations_Control;
 
 import Ezebuiro.Database_Connectivity.DatabaseConnection;
 import Ezebuiro.Entities.Boat;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoatDAO {
+@Repository
+public class BoatDAO implements IBoatDAO {
 
-    public void createBoat(Boat boat) {
+    @Override
+    public void addBoat(Boat boat) {
         String sql = "INSERT INTO Boat(brand, model, platenumber, priceperday, available,seats) VALUES(?,?,?,?,?,?)";
 
         try (Connection conn = DatabaseConnection.getConnection();) {
@@ -34,26 +38,28 @@ public class BoatDAO {
         }
     }
 
-
-    public List<Boat> getAllBoats() {
-        List<Boat> boats = new ArrayList<>();
-        String sql = "SELECT * FROM Boat";
+    @Override
+    public Boat getBoatById(int id) throws SQLException {
+        Boat boat = null;
+        String sql = "SELECT * FROM Boat WHERE id = ?";
 
         try {
-            Connection db_con = DatabaseConnection.getConnection();
-            Statement state = db_con.createStatement();
-            ResultSet rs = state.executeQuery(sql);
+            Connection connect = DatabaseConnection.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()) {
-                boats.add(mapnewboat(rs));
+            if (rs.next()) {
+                boat = mapnewboat(rs);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }catch(SQLException e){
+            System.out.println("No boat by this id");
         }
-        return boats;
+        return boat;
     }
 
-    public List<Boat> SearchbyBrand(String brand) {
+    @Override
+    public List<Boat> getBoatbyBrand(String brand) throws SQLException {
         List<Boat> boats = new ArrayList<>();
         String sql = "SELECT * FROM Boat WHERE brand = ?";
 
@@ -75,26 +81,27 @@ public class BoatDAO {
         return boats;
     }
 
-    public Boat searchById(int id){
-        Boat boat = null;
-        String sql = "SELECT * FROM Boat WHERE id = ?";
+    @Override
+    public List<Boat> getAllBoats() {
+        List<Boat> boats = new ArrayList<>();
+        String sql = "SELECT * FROM Boat";
 
         try {
-                Connection connect = DatabaseConnection.getConnection();
-                PreparedStatement stmt = connect.prepareStatement(sql);
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
+            Connection db_con = DatabaseConnection.getConnection();
+            Statement state = db_con.createStatement();
+            ResultSet rs = state.executeQuery(sql);
 
-            if (rs.next()) {
-                boat = mapnewboat(rs);
+            while (rs.next()) {
+                boats.add(mapnewboat(rs));
             }
-        }catch(SQLException e){
-            System.out.println("No boat by this id");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return boat;
+        return boats;
     }
 
-    public void updateBoatAvailability(Boat boat,boolean available) throws SQLException {
+    @Override
+    public void updateBoat(Boat boat,boolean available) throws SQLException {
         String sql = "UPDATE Boat SET available=? WHERE id=?";
         try (
                 Connection con = DatabaseConnection.getConnection();
@@ -115,8 +122,8 @@ public class BoatDAO {
         }
     }
 
-
-    public List<Boat> Advancedsearch(int minseat, int maxseat, double maxRentPrice, String brand, String model) throws SQLException {
+    @Override
+    public List<Boat> searchBoats(int minseat, int maxseat, double maxRentPrice, String brand, String model) throws SQLException {
         List<Boat> boats = new ArrayList<>();
         String sql = "SELECT * FROM Boat WHERE seats BETWEEN ? AND ? AND pricePerDay <= ? AND brand = ? AND model = ?";
 
@@ -136,8 +143,10 @@ public class BoatDAO {
             }
         }
         return boats;
+
     }
 
+    @Override
     public void deleteBoat(int id) throws SQLException {
         String sql = "DELETE FROM Boat WHERE id=?";
         try (

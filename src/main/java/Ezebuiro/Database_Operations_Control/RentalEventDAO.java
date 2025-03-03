@@ -2,13 +2,16 @@ package Ezebuiro.Database_Operations_Control;
 
 import Ezebuiro.Database_Connectivity.DatabaseConnection;
 import Ezebuiro.Entities.RentalEvent;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RentalEventDAO {
+@Repository
+public class RentalEventDAO implements IRentalEventDAO {
 
+    @Override
     public void addRentalEvent(RentalEvent rentalEvent) throws SQLException {
         String sql = "INSERT INTO RentalEvent(boatId, customerId, rentalDate, returnDate, totalCost, isClosed)" +
                 " VALUES (?,?,?,?,?,?)";
@@ -33,7 +36,8 @@ public class RentalEventDAO {
 
     }
 
-    public RentalEvent EventbyID(int id) throws SQLException {
+    @Override
+    public RentalEvent getRentalEventById(int id) throws SQLException {
         RentalEvent event = null;
         String sql = "SELECT * FROM RentalEvent WHERE id = ?";
 
@@ -41,16 +45,17 @@ public class RentalEventDAO {
                 Connection connect = DatabaseConnection.getConnection();
                 PreparedStatement ps = connect.prepareStatement(sql)){
 
-                ps.setInt(1, id);
-                ResultSet rs = ps.executeQuery();
-                if(rs.next()) {
-                    event = maptoEvent(rs);
-                }
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                event = maptoEvent(rs);
+            }
         }
         return event;
     }
 
-    public List<RentalEvent> getAllEvents() throws SQLException {
+    @Override
+    public List<RentalEvent> getAllRentalEvents() throws SQLException {
         List<RentalEvent> events = new ArrayList<>();
 
         String sql = "SELECT * FROM RentalEvent";
@@ -67,7 +72,8 @@ public class RentalEventDAO {
         return events;
     }
 
-    public void updateEvent(RentalEvent event, Date returnDate, boolean isClosed,Double TotalCost) throws SQLException {
+    @Override
+    public void updateRentalEvent(RentalEvent event, Date returnDate, boolean isClosed,Double TotalCost) throws SQLException {
         String sql = "UPDATE RentalEvent SET boatId=?,customerId=?,rentalDate=?,returnDate=?,totalCost=?,isClosed=? WHERE id = ?";
         try(
                 Connection connect = DatabaseConnection.getConnection();
@@ -84,7 +90,9 @@ public class RentalEventDAO {
         }
     }
 
-    public void deleteEvent(int id) throws SQLException {
+
+    @Override
+    public void deleteRentalEvent(int id) throws SQLException {
         String sql = "DELETE FROM RentalEvent WHERE id = ?";
 
         try(
@@ -95,9 +103,6 @@ public class RentalEventDAO {
             ps.executeUpdate();
         }
     }
-
-
-
 
     public RentalEvent maptoEvent(ResultSet rs) throws SQLException {
         RentalEvent event = new RentalEvent(
@@ -112,6 +117,5 @@ public class RentalEventDAO {
 
         return event;
     }
-
 
 }

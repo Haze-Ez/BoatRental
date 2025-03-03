@@ -5,28 +5,32 @@ import Ezebuiro.Database_Operations_Control.BoatDAO;
 import Ezebuiro.Database_Operations_Control.RentalEventDAO;
 import Ezebuiro.Entities.Boat;
 import Ezebuiro.Entities.RentalEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
+@Service
 public class RentalEventService {
-    private RentalEventDAO eventDAO;
-    private BoatDAO boatDAO;
+    private final RentalEventDAO eventDAO;
+    private final BoatDAO boatDAO;
 
-    public RentalEventService() {
+    @Autowired
+    public RentalEventService(RentalEventDAO eventDAO,BoatDAO boatDAO) {
         this.eventDAO = new RentalEventDAO();
         this.boatDAO = new BoatDAO();
     }
 
     public Boat getBoatById(int boatId) throws SQLException {
-        return boatDAO.searchById(boatId);
+        return boatDAO.getBoatById(boatId);
     }
 
     public void setAvailableById(int boatId, boolean available) throws SQLException {
         Boat boat = getBoatById(boatId);
-        boatDAO.updateBoatAvailability(boat, available);
+        boatDAO.updateBoat(boat, available);
     }
 
     public boolean isAvailable(int boatId) throws SQLException {
@@ -68,19 +72,19 @@ public class RentalEventService {
 
 
     public RentalEvent getRentalEventById(int id) throws SQLException {
-        return eventDAO.EventbyID(id);
+        return eventDAO.getRentalEventById(id);
     }
 
     public List<RentalEvent> getAllRentalEvents() throws SQLException {
-        return eventDAO.getAllEvents();
+        return eventDAO.getAllRentalEvents();
     }
 
     public void updateRentalEvent(RentalEvent rentalEvent,Date returnDate,boolean closed,Double total) throws SQLException {
-       eventDAO.updateEvent(rentalEvent,returnDate,closed,total);
+       eventDAO.updateRentalEvent(rentalEvent,returnDate,closed,total);
     }
 
     public void deleteRentalEvent(int id) throws SQLException {
-       eventDAO.deleteEvent(id);
+       eventDAO.deleteRentalEvent(id);
     }
 }
 

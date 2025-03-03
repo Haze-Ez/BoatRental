@@ -2,15 +2,17 @@ package Ezebuiro.Database_Operations_Control;
 
 import Ezebuiro.Database_Connectivity.DatabaseConnection;
 import Ezebuiro.Entities.Customer;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class CustomerDAO {
-
-    public void Createcustomer(Customer customer) throws SQLException {
+@Repository
+public class CustomerDAO implements ICustomerDAO {
+    @Override
+    public void addCustomer(Customer customer) throws SQLException {
         String sql = "INSERT INTO Customer(firstname, lastname, email, boatLicense, countrycode) VALUES ( ?, ?, ?, ?, ?)";
 
         try (
@@ -35,7 +37,8 @@ public class CustomerDAO {
         }
     }
 
-    public Customer searchbyid(int id) throws SQLException {
+    @Override
+    public Customer getCustomerById(int id) throws SQLException {
         Customer customer = null;
         String sql = "SELECT * FROM Customer WHERE id = ?";
 
@@ -52,7 +55,8 @@ public class CustomerDAO {
         return customer;
     }
 
-    public Customer searchByName(String name)  {
+    @Override
+    public Customer getByName(String name) throws SQLException {
         Customer customer = null;
 
         String[] parts = name.split("_",2);
@@ -76,40 +80,43 @@ public class CustomerDAO {
         return customer;
     }
 
+    @Override
     public List<Customer> getAllCustomers() throws SQLException {
-            List<Customer> customers = new ArrayList<>();
+        List<Customer> customers = new ArrayList<>();
 
-            String sql = "SELECT * FROM Customer";
+        String sql = "SELECT * FROM Customer";
 
-            try(
-                    Connection connect = DatabaseConnection.getConnection();
-                    Statement stmt = connect.createStatement();
-                    ){
-                ResultSet rs = stmt.executeQuery(sql);
-                while (rs.next()) {
+        try(
+                Connection connect = DatabaseConnection.getConnection();
+                Statement stmt = connect.createStatement();
+        ){
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
                 customers.add(mapnewcustomer(rs));
-                }
             }
-            return customers;
         }
+        return customers;
+    }
 
-    public void updatecustomer(Customer customer,String boatLicense) throws SQLException {
+    @Override
+    public void updateCustomer(Customer customer, String boatLicense) throws SQLException {
         String sql = "UPDATE Customer SET firstName = ?,lastName = ?,email = ?,boatLicense = ?,countrycode = ? WHERE id = ?";
         try(
                 Connection connect = DatabaseConnection.getConnection();
                 PreparedStatement ps = connect.prepareStatement(sql)){
 
-                ps.setString(1, customer.getFirstName());
-                ps.setString(2, customer.getLastName());
-                ps.setString(3, customer.getEmail());
-                ps.setString(4, boatLicense);
-                ps.setString(5, customer.getCountrycode());
-                ps.setInt(6, customer.getId());
-                ps.executeUpdate();
+            ps.setString(1, customer.getFirstName());
+            ps.setString(2, customer.getLastName());
+            ps.setString(3, customer.getEmail());
+            ps.setString(4, boatLicense);
+            ps.setString(5, customer.getCountrycode());
+            ps.setInt(6, customer.getId());
+            ps.executeUpdate();
         }
     }
 
-    public void deletecustomer(int id) throws SQLException {
+    @Override
+    public void deleteCustomer(int id) throws SQLException {
         String sql = "DELETE FROM Customer WHERE id = ?";
 
         try(

@@ -17,16 +17,16 @@ public class RentalServiceTest {
 
     @BeforeEach
     void setUp() throws SQLException {
-        rentalEventService = new RentalEventService();
-        boatService = new BoatService();
-        customerService = new CustomerService();
+        rentalEventService = new RentalEventService(new RentalEventDAO(),new BoatDAO());
+        boatService = new BoatService(new BoatDAO());
+        customerService = new CustomerService(new CustomerDAO());
         events = rentalEventService.getAllRentalEvents();
     }
 
     @Test
     public void TestAddEvent() throws SQLException {
-        if(!(boatService.getBoat(3).isAvailable())){
-            boatService.Availability(boatService.getBoat(3),true);
+        if(!(boatService.getBoatById(3).isAvailable())){
+            boatService.Availability(boatService.getBoatById(3),true);
         }
 
         if (!(events.isEmpty())){
@@ -56,8 +56,7 @@ public class RentalServiceTest {
 
     @Test
     void TestUpdateEvent() throws SQLException {
-        // Ensure boat is available before proceeding
-        Boat boat = boatService.getBoat(3);
+        Boat boat = boatService.getBoatById(3);
         if (!boat.isAvailable()) {
             boatService.Availability(boat, true);
         }

@@ -1,82 +1,37 @@
 package Ezebuiro.Executable;
 
-import Ezebuiro.Database_Operations_Control.BoatDAO;
-import Ezebuiro.Database_Operations_Control.BoatDAO;
-import Ezebuiro.Entities.Boat;
-import Ezebuiro.Entities.Customer;
-import Ezebuiro.Entities.RentalEvent;
+import Ezebuiro.Config.AppConfig;
 import Ezebuiro.Services.BoatService;
 import Ezebuiro.Services.CustomerService;
 import Ezebuiro.Services.RentalEventService;
+import Ezebuiro.Utility.DatabaseInitializer;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello and welcome!");
-
-        // Initialize database (if necessary)
-     // new Ezebuiro.Utility.DatabaseInitializer().initialize();
-
-        // Fetch all boats from the database
-        BoatService boatService = new BoatService();
-        List<Boat> boats = boatService.getAllBoats();
-
-        RentalEventService rentalService = new RentalEventService();
-      Boat boatCreateTest = new Boat(0,"Shark","XPS-314",400.0,350,"ABAB1212",false);
-      //boatService.create(boatCreateTest);
-        // Check if there are boats and print the first and last ones
-            if (!boats.isEmpty()) {
-                System.out.println("First Boat: " + boats.get(0));
-                System.out.println("Last Boat: " + boats.get(boats.size() - 1));
-
-                System.out.println("------------------------------------------------------------------------------------------------------------------------");
-
-                try {
-                    System.out.println("Selection: "+boatService.Advancedsearch(5,10,300,"Sea Ray","SPX 210"));
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                System.out.println("------------------------------------------------------------------------------------------------------------------------");
-
-                try {
-                    for(RentalEvent event : rentalService.getAllRentalEvents())
-                        System.out.print(event+"\n");
-
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-
-                System.out.println();
-
-                System.out.println("------------------------------------------------------------------------------------------------------------------------");
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        DatabaseInitializer dbinit = context.getBean(DatabaseInitializer.class);
+        System.out.println("Hello and welcome! This is the Boat Rental Program");
 
 
-                for(Boat boat : boats)
-                    System.out.print(boat+"\n");
+        //dbinit.initialize();
+        BoatService boatService = context.getBean(BoatService.class);
+        CustomerService customerService = context.getBean(CustomerService.class);
+        RentalEventService rentalEventService = context.getBean(RentalEventService.class);
 
-                System.out.println();
-
-            } else {
-                System.out.println("No boats available.");
-            }
-        System.out.println("------------------------------------------------------------------------------------------------------------------------");
-
-        CustomerService customerService = new CustomerService();
         try {
-            List<Customer> customers = customerService.getAllCustomers();
-
-            for(Customer customer : customers)
-                System.out.print(customer+"\n");
-
-
-
+            System.out.println(customerService.getAllCustomers().getFirst().toString());
+            System.out.println(customerService.getAllCustomers().getLast().toString());
+            System.out.println(boatService.getAllBoats().getFirst());
+            System.out.println(boatService.getAllBoats().getLast());
+            System.out.println(rentalEventService.getAllRentalEvents().getFirst());
+            System.out.println(rentalEventService.getAllRentalEvents().getLast());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
+
 }
