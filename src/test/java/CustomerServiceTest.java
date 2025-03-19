@@ -1,13 +1,11 @@
 
 
-import Ezebuiro.Database_Operations_Control.CustomerDAO;
-import Ezebuiro.Entities.Boat;
+import Ezebuiro.Database_Operations_Control.Implements.CustomerDAO;
 import Ezebuiro.Entities.Customer;
 import Ezebuiro.Services.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 

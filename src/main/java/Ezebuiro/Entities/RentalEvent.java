@@ -1,9 +1,7 @@
 package Ezebuiro.Entities;
 
-import Ezebuiro.Database_Operations_Control.BoatDAO;
-import Ezebuiro.Database_Operations_Control.CustomerDAO;
-import Ezebuiro.Entities.Customer;
-import Ezebuiro.Entities.Boat;
+import Ezebuiro.Database_Operations_Control.Implements.BoatDAO;
+import Ezebuiro.Database_Operations_Control.Implements.CustomerDAO;
 
 import java.sql.Date;
 import java.sql.SQLException;

@@ -1,7 +1,9 @@
+import Ezebuiro.Database_Operations_Control.Implements.BoatDAO;
+import Ezebuiro.Database_Operations_Control.Implements.CustomerDAO;
+import Ezebuiro.Database_Operations_Control.Implements.RentalEventDAO;
 import Ezebuiro.Entities.Boat;
 import Ezebuiro.Entities.RentalEvent;
 import Ezebuiro.Services.*;
-import Ezebuiro.Database_Operations_Control.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +28,7 @@ public class RentalServiceTest {
     @Test
     public void TestAddEvent() throws SQLException {
         if(!(boatService.getBoatById(3).isAvailable())){
-            boatService.Availability(boatService.getBoatById(3),true);
+            boatService.UpdateBoat(boatService.getBoatById(3),true);
         }
 
         if (!(events.isEmpty())){
@@ -58,7 +60,7 @@ public class RentalServiceTest {
     void TestUpdateEvent() throws SQLException {
         Boat boat = boatService.getBoatById(3);
         if (!boat.isAvailable()) {
-            boatService.Availability(boat, true);
+            boatService.UpdateBoat(boat, true);
         }
 
 

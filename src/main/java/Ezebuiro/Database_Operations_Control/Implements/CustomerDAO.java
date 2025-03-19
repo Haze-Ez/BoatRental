@@ -1,13 +1,13 @@
-package Ezebuiro.Database_Operations_Control;
+package Ezebuiro.Database_Operations_Control.Implements;
 
 import Ezebuiro.Database_Connectivity.DatabaseConnection;
+import Ezebuiro.Database_Operations_Control.ICustomerDAO;
 import Ezebuiro.Entities.Customer;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Repository
 public class CustomerDAO implements ICustomerDAO {

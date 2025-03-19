@@ -1,8 +1,10 @@
 package Ezebuiro.Services;
 
 import Ezebuiro.Database_Connectivity.DatabaseConnection;
-import Ezebuiro.Database_Operations_Control.BoatDAO;
-import Ezebuiro.Database_Operations_Control.RentalEventDAO;
+import Ezebuiro.Database_Operations_Control.IBoatDAO;
+import Ezebuiro.Database_Operations_Control.IRentalEventDAO;
+import Ezebuiro.Database_Operations_Control.Implements.BoatDAO;
+import Ezebuiro.Database_Operations_Control.Implements.RentalEventDAO;
 import Ezebuiro.Entities.Boat;
 import Ezebuiro.Entities.RentalEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +17,13 @@ import java.util.List;
 
 @Service
 public class RentalEventService {
-    private final RentalEventDAO eventDAO;
-    private final BoatDAO boatDAO;
+    private final IRentalEventDAO eventDAO;
+    private final IBoatDAO boatDAO;
 
     @Autowired
     public RentalEventService(RentalEventDAO eventDAO,BoatDAO boatDAO) {
-        this.eventDAO = new RentalEventDAO();
-        this.boatDAO = new BoatDAO();
+        this.eventDAO =  new RentalEventDAO();
+        this.boatDAO =  new BoatDAO();
     }
 
     public Boat getBoatById(int boatId) throws SQLException {

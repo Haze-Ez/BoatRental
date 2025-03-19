@@ -1,8 +1,8 @@
-package Ezebuiro.Database_Operations_Control;
+package Ezebuiro.Database_Operations_Control.Implements;
 
 import Ezebuiro.Database_Connectivity.DatabaseConnection;
+import Ezebuiro.Database_Operations_Control.IBoatDAO;
 import Ezebuiro.Entities.Boat;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
@@ -125,7 +125,7 @@ public class BoatDAO implements IBoatDAO {
     @Override
     public List<Boat> searchBoats(int minseat, int maxseat, double maxRentPrice, String brand, String model) throws SQLException {
         List<Boat> boats = new ArrayList<>();
-        String sql = "SELECT * FROM Boat WHERE seats BETWEEN ? AND ? AND pricePerDay <= ? AND brand = ? AND model = ?";
+        String sql = "SELECT * FROM Boat WHERE seats BETWEEN ? AND ? AND pricePerDay = ? AND brand = ? AND model = ?";
 
         try (
                 Connection connect = DatabaseConnection.getConnection();

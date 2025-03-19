@@ -1,7 +1,8 @@
 package Ezebuiro.Services;
 
 
-import Ezebuiro.Database_Operations_Control.BoatDAO;
+import Ezebuiro.Database_Operations_Control.IBoatDAO;
+import Ezebuiro.Database_Operations_Control.Implements.BoatDAO;
 import Ezebuiro.Entities.Boat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,18 +12,18 @@ import java.util.List;
 
 @Service
 public class BoatService {
-    private final BoatDAO boatDAO;
+    private final IBoatDAO boatDAO;
 
     @Autowired
-    public BoatService(BoatDAO boatDAO) {
+    public BoatService(IBoatDAO boatDAO) {
         this.boatDAO = new BoatDAO();
     }
 
-    public void addBoat(Boat boat){
+    public void addBoat(Boat boat) throws SQLException {
         boatDAO.addBoat(boat);
     }
 
-    public List<Boat> getAllBoats(){
+    public List<Boat> getAllBoats() throws SQLException {
         return boatDAO.getAllBoats();
     }
 
@@ -46,7 +47,7 @@ public class BoatService {
         return boatDAO.searchBoats(min, max, price, brand, model);
     }
 
-    public void Availability(Boat boat,boolean available) throws SQLException {
+    public void UpdateBoat(Boat boat,boolean available) throws SQLException {
         boatDAO.updateBoat(boat,available);
     }
 

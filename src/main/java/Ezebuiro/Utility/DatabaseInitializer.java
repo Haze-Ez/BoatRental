@@ -1,12 +1,9 @@
 package Ezebuiro.Utility;
 
-import Ezebuiro.Database_Operations_Control.BoatDAO;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 @Component

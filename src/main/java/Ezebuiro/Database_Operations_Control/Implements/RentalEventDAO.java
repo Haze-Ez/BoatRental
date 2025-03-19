@@ -1,6 +1,7 @@
-package Ezebuiro.Database_Operations_Control;
+package Ezebuiro.Database_Operations_Control.Implements;
 
 import Ezebuiro.Database_Connectivity.DatabaseConnection;
+import Ezebuiro.Database_Operations_Control.IRentalEventDAO;
 import Ezebuiro.Entities.RentalEvent;
 import org.springframework.stereotype.Repository;
 

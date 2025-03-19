@@ -1,6 +1,7 @@
 package Ezebuiro.Services;
 
-import Ezebuiro.Database_Operations_Control.CustomerDAO;
+import Ezebuiro.Database_Operations_Control.ICustomerDAO;
+import Ezebuiro.Database_Operations_Control.Implements.CustomerDAO;
 import Ezebuiro.Entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import java.util.List;
 @Service
 public class CustomerService {
 
-    private final CustomerDAO customerDAO;
+    private final ICustomerDAO customerDAO;
     @Autowired
     public CustomerService(CustomerDAO customerDAO) {
         this.customerDAO = new CustomerDAO();
